@@ -57,10 +57,10 @@ Deze checklist helpt je om het project stap voor stap om te bouwen naar een nett
 
 ## Fase 7: Monitoring toevoegen
 
-- voeg metrics endpoints of exporters toe
+- voeg `/metrics` endpoints en health probes toe
 - maak een `Prometheus` configuratie
-- maak een `Grafana` dashboard
-- toon basisinformatie zoals uptime, requests en errors
+- maak `Grafana` provisioning en een basisdashboard
+- toon basisinformatie zoals availability, requests, latency en geheugenverbruik
 
 ## Fase 8: Functionele basis opnieuw aantonen
 

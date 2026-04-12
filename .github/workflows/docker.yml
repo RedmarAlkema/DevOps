@@ -102,6 +102,22 @@ jobs:
           }
         shell: pwsh
 
+      - name: Check Prometheus UI
+        run: |
+          $status = (Invoke-WebRequest -UseBasicParsing http://localhost:9090/-/ready).StatusCode
+          if ($status -ne 200) {
+            throw "Prometheus readiness gaf onverwachte statuscode: $status"
+          }
+        shell: pwsh
+
+      - name: Check Grafana UI
+        run: |
+          $status = (Invoke-WebRequest -UseBasicParsing http://localhost:3100/api/health).StatusCode
+          if ($status -ne 200) {
+            throw "Grafana health gaf onverwachte statuscode: $status"
+          }
+        shell: pwsh
+
       - name: Print recent logs
         if: always()
         run: docker compose logs --tail=50
