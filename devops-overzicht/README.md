@@ -1,7 +1,7 @@
 # DevOps Overzicht
 
 Deze map bundelt de documentatie voor het DevOps-deel van dit project.
-De focus ligt op lokale reproduceerbaarheid, tooling, documentatie, monitoring en CI.
+De focus ligt op lokale reproduceerbaarheid, tooling, documentatie, monitoring, unit tests en CI.
 
 `schoolproject.md` is bewust niet aangepast.
 
@@ -44,8 +44,17 @@ DevOps-onderdelen die nu in de documentatie zijn meegenomen:
 - `Docker` en `Docker Swarm`
 - `GitHub Actions`
 - `ESLint`
+- `Jest` unit tests voor kernservices
 - `Prometheus`
 - `Grafana`
+
+## Huidige opleverstatus
+
+- `auth`, `target` en `upload` hebben unit tests
+- `CI` draait linting, install-checks en unit tests
+- `Docker` draait de volledige stack lokaal
+- `Prometheus` en `Grafana` geven live inzicht in health en metrics
+- mailverzending werkt via de mailservice met SMTP-credentials uit `microservices/mail/.env`
 
 ## Aanbevolen leesvolgorde
 

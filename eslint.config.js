@@ -40,4 +40,19 @@ module.exports = [
       ],
     },
   },
+  {
+    files: [
+      'auth/__tests__/**/*.js',
+      'microservices/**/__tests__/**/*.js',
+    ],
+    languageOptions: {
+      globals: {
+        beforeEach: 'readonly',
+        describe: 'readonly',
+        expect: 'readonly',
+        jest: 'readonly',
+        test: 'readonly',
+      },
+    },
+  },
 ];

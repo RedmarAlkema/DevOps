@@ -67,3 +67,36 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ matrix.service.path }}
         run: npm ci
+
+  service-test:
+    name: Run Unit Tests (${{ matrix.service.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - name: Auth
+            path: auth
+          - name: Target
+            path: microservices/target
+          - name: Upload
+            path: microservices/upload
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ${{ matrix.service.path }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.service.path }}
+        run: npm ci
+
+      - name: Run unit tests
+        working-directory: ${{ matrix.service.path }}
+        run: npm test
