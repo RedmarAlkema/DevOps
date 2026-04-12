@@ -1,6 +1,4 @@
 const amqp = require('amqplib');
-const Target = require('../models/Target');
-const axios = require('axios');
 const { getWinner } = require('../controllers/scoreController');
 
 class GetDeadline {

@@ -8,13 +8,13 @@ async function consumeUpload() {
     const channel = await connection.createChannel();
 
     const exchangeName = "UploadExchange";
-    const queueName = "upload_created"; 
+    const queueName = "upload_created";
 
     await channel.assertExchange(exchangeName, "fanout", { durable: true });
 
     await channel.assertQueue(queueName, { durable: true });
 
-   await channel.bindQueue(queueName, exchangeName, "");
+    await channel.bindQueue(queueName, exchangeName, "");
 
     console.log("📥 Wachten op berichten (fanout)...");
 
@@ -40,8 +40,8 @@ async function consumeUpload() {
           });
 
           await newUpload.save();
-          console.log("upload: ", newUpload )
-          score = await controller.getScoreId(newUpload);
+          console.log("upload: ", newUpload);
+          const score = await controller.getScoreId(newUpload);
           console.log("Jouw score is: ", score);
           console.log("✅ Upload opgeslagen in read DB:", newUpload._id);
         } catch (err) {

@@ -1,5 +1,6 @@
 const Target = require('../models/Target');
 const mongoose = require("mongoose");
+const targetService = require('../services/targetService');
 
 exports.getTargetFromRequest = async (req) => {
   try {
@@ -26,7 +27,6 @@ exports.getTargetFromRequest = async (req) => {
     });
 
     return newTarget;
-
   } catch (error) {
     console.error(error);
     throw new Error('Er is iets fout gegaan bij het uploaden');
@@ -85,11 +85,11 @@ exports.getAllTargets = async (req, res) => {
 
     const targets = await Target.find(filters);
 
-    const formattedTargets = targets.map(t => ({
+    const formattedTargets = targets.map((t) => ({
       ...t.toObject(),
-      img: t.img?.data 
+      img: t.img?.data
         ? `data:${t.img.contentType};base64,${t.img.data.toString('base64')}`
-        : null
+        : null,
     }));
 
     res.status(200).json(formattedTargets);

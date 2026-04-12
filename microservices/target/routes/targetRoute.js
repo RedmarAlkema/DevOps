@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const upload = require('../middlewares/multer');
 const targetController = require("../controllers/targetController");
-const { uploadTarget } = require("../controllers/targetController");
 const auth = require("../middlewares/targetMiddleware");
 const Producer = require("../services/messageProducer");
 

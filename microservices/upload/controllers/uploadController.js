@@ -7,7 +7,7 @@ const uploadFile = async (req, res) => {
       return res.status(400).json({ message: 'Geen bestand meegegeven' });
     }
 
-    const { userId, targetId } = req.body;
+    const { targetId } = req.body;
     const uploadId = new mongoose.Types.ObjectId();
 
     const newUpload = new Upload({
@@ -55,14 +55,13 @@ const getUploadFromRequest = async (req) => {
     });
 
     return newUpload;
-
   } catch (error) {
     console.error(error);
     throw new Error("Er is iets fout gegaan bij het verwerken van de upload");
   }
 };
 
-  const deleteUpload = async (req, res) => {
+const deleteUpload = async (req, res) => {
   const { uploadId } = req.params;
 
   try {

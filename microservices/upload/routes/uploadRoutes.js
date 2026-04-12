@@ -3,8 +3,7 @@ const router = express.Router();
 const upload = require('../middlewares/multer');
 const auth = require('../middlewares/auth');
 const uploadController = require("../controllers/uploadController");
-const { uploadFile } = require('../controllers/uploadController');
-const { getUploadFromRequest } = require("../controllers/uploadController")
+const { getUploadFromRequest } = require("../controllers/uploadController");
 const Producer = require("../services/messageProducer");
 
 router.post("/", auth, upload.any(), async (req, res) => {

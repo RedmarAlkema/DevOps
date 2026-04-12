@@ -10,20 +10,20 @@ class Producer {
   }
 
   async publishMessage(upload) {
-    if (!this.upload) {
+    if (!this.channel) {
       await this.createChannel();
     }
 
     if (typeof upload.then === 'function') {
-        upload = await upload;
+      upload = await upload;
     }
 
     const exchangeName = config.rabbitMQ.exchangeName;
 
     await this.channel.assertExchange(exchangeName, "fanout", { durable: true });
 
-    const imgData = upload.img?.data 
-      ? upload.img.data.toString('base64') 
+    const imgData = upload.img?.data
+      ? upload.img.data.toString('base64')
       : null;
 
     const messagePayload = {
@@ -33,17 +33,17 @@ class Producer {
       targetId: upload.targetId,
       contentType: upload.contentType,
       uploadDate: upload.uploadDate,
-      img: imgData 
+      img: imgData
         ? {
-            data: imgData,
-            contentType: upload.img.contentType
+          data: imgData,
+          contentType: upload.img.contentType
           }
         : null
     };
 
     this.channel.publish(
       exchangeName,
-      "", 
+      "",
       Buffer.from(JSON.stringify(messagePayload)),
       { persistent: true }
     );

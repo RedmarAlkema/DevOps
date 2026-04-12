@@ -3,7 +3,6 @@ const Target = require("../models/Target");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-const mongoose = require("mongoose");
 const FormData = require('form-data');
 
 const IMAGGA_ENDPOINT = "https://api.imagga.com/v2/tags";
@@ -15,7 +14,6 @@ const AUTH_HEADER = {
 };
 
 async function analyzeImageBuffer(buffer) {
-  const base64 = buffer.toString("base64");
   const filePath = path.join(__dirname, "temp.jpg");
   fs.writeFileSync(filePath, buffer);
 
@@ -72,7 +70,7 @@ exports.getScoreId = async (temp) => {
   try {
     const upload = await Upload.findOne({ uploadId: id });
 
-    if (!upload) return { msg: "geen upload target gevonden" }
+    if (!upload) return { msg: "geen upload target gevonden" };
 
     const target = await Target.findOne({ targetId: upload.targetId });
 

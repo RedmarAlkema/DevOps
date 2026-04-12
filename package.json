@@ -1,0 +1,13 @@
+{
+  "name": "devops-root",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Shared development tooling for the DevOps microservices project",
+  "scripts": {
+    "lint": "eslint \"API-gateway/**/*.js\" \"auth/**/*.js\" \"microservices/**/*.js\"",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "devDependencies": {
+    "eslint": "^9.24.0"
+  }
+}

@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
     }
 
     next();
-  } catch (err) {
+  } catch {
     return res.status(401).json({ msg: "Target: Token is ongeldig" });
   }
 };
