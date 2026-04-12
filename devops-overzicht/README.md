@@ -17,6 +17,7 @@ De focus ligt op lokale reproduceerbaarheid, tooling, documentatie, monitoring, 
 - [08-demo-checklist.md](08-demo-checklist.md)
 - [09-volgorde-aanpak-checklist.md](09-volgorde-aanpak-checklist.md)
 - [10-wat-jij-zelf-moet-regelen.md](10-wat-jij-zelf-moet-regelen.md)
+- [11-bunnyshell-deploy.md](11-bunnyshell-deploy.md)
 - [BENODIGDE_SYSTEMEN.md](BENODIGDE_SYSTEMEN.md)
 
 ## Snel beeld
@@ -47,6 +48,7 @@ DevOps-onderdelen die nu in de documentatie zijn meegenomen:
 - `Jest` unit tests voor kernservices
 - `Prometheus`
 - `Grafana`
+- `Bunnyshell` deploymentvoorbereiding
 
 ## Huidige opleverstatus
 
@@ -55,6 +57,7 @@ DevOps-onderdelen die nu in de documentatie zijn meegenomen:
 - `Docker` draait de volledige stack lokaal
 - `Prometheus` en `Grafana` geven live inzicht in health en metrics
 - mailverzending werkt via de mailservice met SMTP-credentials uit `microservices/mail/.env`
+- de repo is voorbereid voor import in `Bunnyshell` via `docker-compose.yml` en `.env.bunnyshell`
 
 ## Aanbevolen leesvolgorde
 

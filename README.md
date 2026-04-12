@@ -6,6 +6,21 @@
 
 Dit project bestaat uit meerdere Node.js microservices met een `API Gateway`, losse databases, `RabbitMQ`, Docker, CI en monitoring via `Prometheus` en `Grafana`.
 
+## Bunnyshell
+
+Deze repository is nu voorbereid voor `Bunnyshell` met:
+
+- een root `.env.bunnyshell` voor environment variables tijdens import
+- healthchecks in `docker-compose.yml` voor alle Node-services
+- volumes, poorten en build-instructies die door Bunnyshell uit Compose gelezen kunnen worden
+
+Meest logische publieke endpoints in Bunnyshell:
+
+- `api-gateway` op poort `3000`
+- `grafana` op poort `3000` in de container
+- optioneel `prometheus` op poort `9090`
+- optioneel `rabbitmq` management op poort `15672`
+
 ## Status
 
 | Service | Rol | Poort | Database | Queue | Health | Unit test | Status |
@@ -34,3 +49,4 @@ Dit project bestaat uit meerdere Node.js microservices met een `API Gateway`, lo
 - standaarddashboard: `DevOps Monitoring Overview`
 
 Zie [devops-overzicht/README.md](devops-overzicht/README.md) voor het complete overzicht van de documentatie.
+Zie ook [devops-overzicht/11-bunnyshell-deploy.md](devops-overzicht/11-bunnyshell-deploy.md) voor de concrete deploystappen.
