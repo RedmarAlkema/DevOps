@@ -1,0 +1,16 @@
+# Standaard eigenaar voor de hele repository
+* @RedmarAlkema
+
+# Microservices
+/API-gateway/ @RedmarAlkema
+/auth/ @RedmarAlkema
+/microservices/clock/ @RedmarAlkema
+/microservices/mail/ @RedmarAlkema
+/microservices/read/ @RedmarAlkema
+/microservices/score/ @RedmarAlkema
+/microservices/target/ @RedmarAlkema
+/microservices/upload/ @RedmarAlkema
+
+# DevOps en governance
+/.github/ @RedmarAlkema
+/devops-overzicht/ @RedmarAlkema
