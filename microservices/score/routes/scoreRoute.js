@@ -7,7 +7,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/score/:uploadId", scoreController.getScore);
-router.get("/winner/:targetId", scoreController.getWinner);
+router.get("/winner/:targetId", scoreController.getWinnerRoute);
 
 router.get("/scores/:targetId", async (req, res) => {
   const result = await scoreController.getAllScores(req.params.targetId);

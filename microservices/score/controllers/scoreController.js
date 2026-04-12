@@ -150,3 +150,18 @@ exports.getWinner = async (targetId) => {
     return { msg: "Interne serverfout" };
   }
 };
+
+exports.getWinnerRoute = async (req, res) => {
+  try {
+    const winner = await exports.getWinner(req.params.targetId);
+
+    if (winner.msg) {
+      return res.status(404).json(winner);
+    }
+
+    return res.json(winner);
+  } catch (err) {
+    console.error("Fout bij winner-route:", err);
+    return res.status(500).json({ msg: "Interne serverfout" });
+  }
+};
