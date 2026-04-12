@@ -50,6 +50,9 @@ jobs:
             auth
             microservices
             .github
+            docker-compose.yml
+            docker-stack.yml
+            .env.docker.example
             package.json
             package-lock.json
             eslint.config.js

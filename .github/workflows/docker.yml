@@ -1,0 +1,90 @@
+name: Docker Validation
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-config:
+    name: Validate Compose And Swarm Config
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate docker-compose.yml
+        run: docker compose config
+
+      - name: Validate docker-stack.yml
+        run: docker compose -f docker-stack.yml config
+
+  build-stack:
+    name: Build Docker Stack
+    runs-on: ubuntu-latest
+    needs: validate-config
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build all service images
+        run: docker compose build
+
+  smoke-test:
+    name: Smoke Test Docker Stack
+    runs-on: ubuntu-latest
+    needs: build-stack
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start stack
+        run: docker compose up -d --build
+
+      - name: Wait for services
+        run: Start-Sleep -Seconds 30
+        shell: pwsh
+
+      - name: Show running containers
+        run: docker compose ps
+
+      - name: Check gateway response
+        run: |
+          $status = (Invoke-WebRequest -UseBasicParsing http://localhost:3000).StatusCode
+          if ($status -ne 404 -and $status -ne 200) {
+            throw "Gateway gaf onverwachte statuscode: $status"
+          }
+        shell: pwsh
+
+      - name: Check mail service response
+        run: |
+          $content = (Invoke-WebRequest -UseBasicParsing http://localhost:3006).Content
+          if ($content -notmatch "Mail Service draait") {
+            throw "Mail-service reageerde niet zoals verwacht"
+          }
+        shell: pwsh
+
+      - name: Check RabbitMQ Management UI
+        run: |
+          $status = (Invoke-WebRequest -UseBasicParsing http://localhost:15672).StatusCode
+          if ($status -ne 200) {
+            throw "RabbitMQ Management gaf onverwachte statuscode: $status"
+          }
+        shell: pwsh
+
+      - name: Print recent logs
+        if: always()
+        run: docker compose logs --tail=50
+
+      - name: Stop stack
+        if: always()
+        run: docker compose down
