@@ -8,6 +8,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3004;
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", service: "read" });
+});
 app.use("/read", targetRoutes);
 
 mongoose.connect(process.env.MONGO_URI)

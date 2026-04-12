@@ -5,6 +5,9 @@ const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 app.use(express.json());
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', service: 'upload' });
+});
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB verbonden met UploadDB'))

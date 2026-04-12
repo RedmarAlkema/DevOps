@@ -57,11 +57,24 @@ jobs:
       - name: Show running containers
         run: docker compose ps
 
-      - name: Check gateway response
+      - name: Check gateway root response
         run: |
-          $status = (Invoke-WebRequest -UseBasicParsing http://localhost:3000).StatusCode
+          try {
+            $status = (Invoke-WebRequest -UseBasicParsing http://localhost:3000).StatusCode
+          } catch {
+            $status = $_.Exception.Response.StatusCode.value__
+          }
+
           if ($status -ne 404 -and $status -ne 200) {
             throw "Gateway gaf onverwachte statuscode: $status"
+          }
+        shell: pwsh
+
+      - name: Check gateway health
+        run: |
+          $status = (Invoke-WebRequest -UseBasicParsing http://localhost:3000/health).StatusCode
+          if ($status -ne 200) {
+            throw "Gateway healthcheck faalde met statuscode: $status"
           }
         shell: pwsh
 
@@ -70,6 +83,14 @@ jobs:
           $content = (Invoke-WebRequest -UseBasicParsing http://localhost:3006).Content
           if ($content -notmatch "Mail Service draait") {
             throw "Mail-service reageerde niet zoals verwacht"
+          }
+        shell: pwsh
+
+      - name: Check mail health
+        run: |
+          $status = (Invoke-WebRequest -UseBasicParsing http://localhost:3006/health).StatusCode
+          if ($status -ne 200) {
+            throw "Mail healthcheck faalde met statuscode: $status"
           }
         shell: pwsh
 

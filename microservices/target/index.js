@@ -8,6 +8,9 @@ const app = express();
 const PORT = process.env.PORT || 3003;
 
 app.use(express.json());
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", service: "target" });
+});
 app.use("/api/targets", targetRoutes);
 
 mongoose
