@@ -1,4 +1,4 @@
-const Clock = require("../models/Clock");
+const Clock = require("../models/clock");
 const moment = require('moment-timezone');
 const amqp = require('amqplib');
 const config = require('../routes/config');

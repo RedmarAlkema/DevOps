@@ -1,0 +1,239 @@
+name: devops-microservices
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: devops-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - devops-bridge
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: devops-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - devops-bridge
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  auth:
+    build:
+      context: ./auth
+    image: devops/auth:latest
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/AuthDB
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      JWT_SECRET: ${JWT_SECRET:-password}
+      GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
+    volumes:
+      - auth_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+  target:
+    build:
+      context: ./microservices/target
+    image: devops/target:latest
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      MONGO_URI: mongodb://mongo:27017/targetservice
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      JWT_SECRET: ${JWT_SECRET:-password}
+      GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
+    volumes:
+      - target_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+  upload:
+    build:
+      context: ./microservices/upload
+    image: devops/upload:latest
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      MONGO_URI: mongodb://mongo:27017/UploadDB
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      JWT_SECRET: ${JWT_SECRET:-password}
+      GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
+    volumes:
+      - upload_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+  read:
+    build:
+      context: ./microservices/read
+    image: devops/read:latest
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3004:3004"
+    environment:
+      PORT: 3004
+      MONGO_URI: mongodb://mongo:27017/readService
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      JWT_SECRET: ${JWT_SECRET:-password}
+      GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
+    volumes:
+      - read_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+  score:
+    build:
+      context: ./microservices/score
+    image: devops/score:latest
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3005:3005"
+    environment:
+      PORT: 3005
+      MONGO_URI: mongodb://mongo:27017/ScoreDB
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      JWT_SECRET: ${JWT_SECRET:-password}
+      GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
+      IMAGGA_API_KEY: ${IMAGGA_API_KEY:-}
+      IMAGGA_API_SECRET: ${IMAGGA_API_SECRET:-}
+    volumes:
+      - score_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+  clock:
+    build:
+      context: ./microservices/clock
+    image: devops/clock:latest
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      MONGO_URI: mongodb://mongo:27017/ClockDB
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      JWT_SECRET: ${JWT_SECRET:-password}
+      GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
+    volumes:
+      - clock_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+  mail:
+    build:
+      context: ./microservices/mail
+    image: devops/mail:latest
+    restart: unless-stopped
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3006:3006"
+    environment:
+      PORT: 3006
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      EMAIL_USER: ${EMAIL_USER:-change-me@example.com}
+      EMAIL_PASS: ${EMAIL_PASS:-change-me}
+    volumes:
+      - mail_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+  api-gateway:
+    build:
+      context: ./API-gateway
+    image: devops/api-gateway:latest
+    restart: unless-stopped
+    depends_on:
+      auth:
+        condition: service_started
+      target:
+        condition: service_started
+      upload:
+        condition: service_started
+      read:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:-password}
+      GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
+      TARGET_SERVICE_URL: http://target:3003/
+      UPLOAD_SERVICE_URL: http://upload:3002/
+      READ_SERVICE_URL: http://read:3004/
+    volumes:
+      - api_gateway_runtime:/usr/src/app/runtime
+    networks:
+      - devops-bridge
+
+networks:
+  devops-bridge:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  rabbitmq_data:
+  api_gateway_runtime:
+  auth_runtime:
+  target_runtime:
+  upload_runtime:
+  read_runtime:
+  score_runtime:
+  clock_runtime:
+  mail_runtime:

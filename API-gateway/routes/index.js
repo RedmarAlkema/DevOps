@@ -1,10 +1,10 @@
-require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
+require('dotenv').config();
 
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../../auth/middleware/authMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 const axios = require('axios');
-const registry = require('./registry.json');
+const registry = require('./registry');
 const multer = require('multer');
 const FormData = require('form-data'); 
 

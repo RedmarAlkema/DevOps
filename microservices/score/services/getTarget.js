@@ -1,21 +1,19 @@
-const amqp = require('amqplib');
-const Target = require('../models/Target');
+const amqp = require("amqplib");
+const Target = require("../models/Target");
 
 async function consumeTarget() {
   try {
-    const connection = await amqp.connect("amqp://localhost");
+    const connection = await amqp.connect(process.env.RABBITMQ_URL || "amqp://localhost");
     const channel = await connection.createChannel();
 
     const exchangeName = "TargetExchange";
-    const queueName = "target_score_queue"; 
+    const queueName = "target_score_queue";
 
     await channel.assertExchange(exchangeName, "fanout", { durable: true });
-
     await channel.assertQueue(queueName, { durable: true });
+    await channel.bindQueue(queueName, exchangeName, "");
 
-   await channel.bindQueue(queueName, exchangeName, "");
-
-    console.log("📥 Wachten op berichten (fanout)...");
+    console.log("Score-service wacht op target-events...");
 
     channel.consume(queueName, async (msg) => {
       if (msg !== null) {
@@ -30,26 +28,27 @@ async function consumeTarget() {
             description: targetData.description,
             img: targetData.img
               ? {
-                  data: Buffer.from(targetData.img.data, 'base64'),
-                  contentType: targetData.img.contentType
-                }
+                data: Buffer.from(targetData.img.data, "base64"),
+                contentType: targetData.img.contentType,
+              }
               : null,
             radius: targetData.radius,
             deadline: targetData.deadline,
-            ownerId: targetData.ownerId
+            ownerId: targetData.ownerId,
           });
 
           await newTarget.save();
-          console.log("✅ Target opgeslagen in read DB:", newTarget._id);
+          console.log("Target opgeslagen in score DB:", newTarget._id);
         } catch (err) {
-          console.error("❌ Fout bij opslaan in MongoDB:", err.message);
+          console.error("Fout bij opslaan in MongoDB:", err.message);
         }
 
         channel.ack(msg);
       }
     });
   } catch (err) {
-    console.error("❌ Fout bij verbinden met RabbitMQ:", err.message);
+    console.error("Fout bij verbinden met RabbitMQ:", err.message);
+    setTimeout(consumeTarget, 5000);
   }
 }
 

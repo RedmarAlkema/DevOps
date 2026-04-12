@@ -45,10 +45,15 @@ Deze checklist helpt je om het project stap voor stap om te bouwen naar een nett
 
 ## Fase 6: Containerisatie en orchestration
 
-- maak `Dockerfile`s per service
-- maak een `docker-compose.yml`
-- zet de stack om naar `Docker Swarm` waar relevant
-- test of services samen opstarten
+- maak per service een eigen `Dockerfile`
+- voeg per service een `.dockerignore` toe
+- gebruik een root `docker-compose.yml` voor lokaal draaien via een `bridge` netwerk
+- gebruik een root `docker-stack.yml` voor `Docker Swarm` via een `overlay` netwerk
+- maak named volumes voor infrastructuur en runtime-data
+- bouw de images met `docker compose build`
+- start lokaal met `docker compose up -d`
+- initialiseer Swarm met `docker swarm init`
+- deploy de stack met `docker stack deploy -c docker-stack.yml devops`
 
 ## Fase 7: Monitoring toevoegen
 

@@ -8,8 +8,8 @@ const FormData = require('form-data');
 const IMAGGA_ENDPOINT = "https://api.imagga.com/v2/tags";
 const AUTH_HEADER = {
   auth: {
-    username: "acc_e3af8817aef8149",
-    password: "497ccbf294a2db5a865c92dc71d6bf58"
+    username: process.env.IMAGGA_API_KEY || "acc_e3af8817aef8149",
+    password: process.env.IMAGGA_API_SECRET || "497ccbf294a2db5a865c92dc71d6bf58"
   }
 };
 

@@ -1,6 +1,6 @@
-module.exports= {
-    rabbitMQ: {
-        url: "amqp://localhost",
-        exchangeName: "clock_exchange"
-    }
+module.exports = {
+  rabbitMQ: {
+    url: process.env.RABBITMQ_URL || "amqp://localhost",
+    exchangeName: "clock_exchange"
+  }
 };
