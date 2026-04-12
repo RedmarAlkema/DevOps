@@ -8,6 +8,7 @@ Deze repository is voorbereid om vanuit `docker-compose.yml` in `Bunnyshell` gei
 - de services hebben build-instructies, volumes en exposed ports
 - alle Node-services hebben een `healthcheck`
 - standaardvariabelen voor Bunnyshell staan in `.env.bunnyshell`
+- de `mail` service gebruikt nu gewone environment variables in plaats van `microservices/mail/.env`
 
 ## Aanbevolen import
 
@@ -29,6 +30,11 @@ Zet deze waarden in `Bunnyshell` als secrets of environment variables:
 - `IMAGGA_API_SECRET`
 - `GRAFANA_ADMIN_USER`
 - `GRAFANA_ADMIN_PASSWORD`
+
+Gebruik voor `mail` dus geen repositorybestand meer, maar alleen deze Bunnyshell secrets:
+
+- `EMAIL_USER`
+- `EMAIL_PASS`
 
 ## Publieke endpoints
 

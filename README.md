@@ -11,6 +11,7 @@ Dit project bestaat uit meerdere Node.js microservices met een `API Gateway`, lo
 Deze repository is nu voorbereid voor `Bunnyshell` met:
 
 - een root `.env.bunnyshell` voor environment variables tijdens import
+- geen verplichte `env_file` meer voor de `mail` service
 - healthchecks in `docker-compose.yml` voor alle Node-services
 - volumes, poorten en build-instructies die door Bunnyshell uit Compose gelezen kunnen worden
 

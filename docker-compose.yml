@@ -268,13 +268,13 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    env_file:
-      - ./microservices/mail/.env
     ports:
       - "3006:3006"
     environment:
       PORT: 3006
       RABBITMQ_URL: amqp://rabbitmq:5672
+      EMAIL_USER: ${EMAIL_USER:-change-me@example.com}
+      EMAIL_PASS: ${EMAIL_PASS:-change-me}
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3006/health').then((res) => process.exit(res.ok ? 0 : 1)).catch(() => process.exit(1))"]
       interval: 15s
