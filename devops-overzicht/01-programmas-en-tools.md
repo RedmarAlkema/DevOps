@@ -1,108 +1,98 @@
 # Programma's En Tools
 
-## Verplicht
+## Kern van het project
 
-### 1. Node.js en npm
-Nodig om alle services te installeren en te starten.
+Deze onderdelen zijn nodig om de applicatie lokaal te draaien:
 
-Gebruik:
+| Tool | Waarom nodig |
+| --- | --- |
+| `Node.js` en `npm` | Installeren en starten van alle services |
+| `MongoDB` | Database voor meerdere services |
+| `RabbitMQ` | Berichtenverkeer tussen services |
+| `Git` | Versiebeheer en DevOps-werkwijze |
 
-- `node`
+## Ontwikkeltools
+
+Deze tools maken lokaal werken sneller en overzichtelijker:
+
+| Tool | Gebruik in dit project |
+| --- | --- |
+| `Nodemon` | Services automatisch herstarten tijdens development |
+| `Visual Studio Code` | Code, terminal, `.env` en Git-beheer |
+| `Postman` | Handmatig endpoints testen |
+| `MongoDB Compass` | Data en collecties controleren |
+| `RabbitMQ Management UI` | Queues en exchanges bekijken |
+
+## DevOps-tools die je wilt gebruiken
+
+Deze tools passen goed bij een schoolopdracht waarin je het project DevOps-proof maakt:
+
+| Tool | Rol in jouw project |
+| --- | --- |
+| `Docker Desktop` | Containers lokaal bouwen en draaien |
+| `Docker Swarm` | Services als stack uitrollen en beheren |
+| `GitHub Actions` | CI-pipeline voor install, lint en basischecks |
+| `ESLint` | Codekwaliteit en consistente stijl bewaken |
+| `Prometheus` | Metrics verzamelen van services en infrastructuur |
+| `Grafana` | Dashboards bouwen voor monitoring en demo |
+
+## Externe diensten
+
+| Dienst | Gebruik |
+| --- | --- |
+| `SMTP` zoals Gmail | Mailservice verstuurt registratie- of notificatiemails |
+| `Imagga API` | Score-service analyseert afbeeldingen |
+
+## Handige commando's
+
+### Runtime en development
+
 - `npm install`
 - `node index.js`
-- `npx nodemon index.js`
-
-### 2. Nodemon
-Handig tijdens development zodat services automatisch herstarten bij codewijzigingen.
-
-Gebruik:
-
+- `node gateway.js`
 - `npx nodemon index.js`
 - `npx nodemon gateway.js`
-- `npm run dev`
 
-Voor jouw project is dit handig omdat je met meerdere losse services werkt en vaak kleine wijzigingen test.
-
-### 3. Git
-Nodig om een nieuwe repository op te zetten en je DevOps-werk vast te leggen.
-
-Gebruik:
+### Git en CI
 
 - `git init`
 - `git add .`
 - `git commit -m "..." `
 - `git remote add origin ...`
+- `git push -u origin main`
 
-### 4. MongoDB
-Nodig als database.
-Meerdere services gebruiken `MONGO_URI`.
+### Docker en Swarm
 
-### 5. RabbitMQ
-Nodig voor communicatie tussen services via berichten.
+- `docker compose up --build`
+- `docker swarm init`
+- `docker stack deploy -c docker-compose.yml devops-stack`
+- `docker service ls`
 
-Gebruikt voor:
+### Kwaliteit en monitoring
 
-- nieuwe gebruiker -> mailservice
-- nieuw target -> read, score, clock
-- nieuwe upload -> score
-- deadline verlopen -> winnaar berekenen
+- `npx eslint .`
+- `docker compose up prometheus grafana`
+- `curl http://localhost:<poort>/metrics`
 
-## Handig voor ontwikkeling en demo
+## Aanbevolen minimale setup
 
-### 6. Postman
-Niet verplicht voor runtime, wel handig om endpoints te testen en in een demo te laten zien.
-
-### 7. Visual Studio Code
-Handig voor:
-
-- code aanpassen
-- terminalgebruik
-- `.env` bestanden beheren
-- Git overzicht
-
-### 8. MongoDB Compass
-Handig om databases en collecties visueel te controleren.
-
-### 9. RabbitMQ Management UI
-Handig om queues en exchanges te bekijken.
-
-Meestal bereikbaar op:
-
-- `http://localhost:15672`
-
-### 10. Docker Desktop
-Niet verplicht voor de huidige code, maar wel erg handig als je het project later meer DevOps-proof wilt maken met containers en `docker-compose`.
-
-## Externe diensten
-
-### 11. Gmail of andere SMTP-provider
-De mailservice gebruikt nu `nodemailer` met Gmail-inlog.
-
-Benodigd:
-
-- `EMAIL_USER`
-- `EMAIL_PASS`
-
-### 12. Imagga API
-De score-service gebruikt Imagga om afbeeldingen te taggen en met elkaar te vergelijken.
-
-## Aanbevolen minimale setup voor jouw vak
-
-Als je dit project voor een DevOps-vak wilt presenteren, zou ik minimaal werken met:
+Als je snel een goede basis wilt neerzetten, werk dan minimaal met:
 
 1. `Node.js`
-2. `Nodemon`
-3. `Git`
-4. `MongoDB`
-5. `RabbitMQ`
-6. `Postman`
-7. `VS Code`
+2. `MongoDB`
+3. `RabbitMQ`
+4. `Git`
+5. `Postman`
+6. `Docker`
+7. `GitHub Actions`
+8. `ESLint`
 
-## Praktische startvolgorde
+## Sterke uitbreiding voor je DevOps-verhaal
 
-1. Start `MongoDB`
-2. Start `RabbitMQ`
-3. Controleer `.env` bestanden
-4. Doe `npm install` per service
-5. Start services met `npx nodemon index.js` of `npx nodemon gateway.js`
-6. Test via Postman of via terminal
+Als je meer punten wilt pakken in je documentatie of demo, dan zijn dit de beste uitbreidingen:
+
+1. `Docker Swarm` voor orchestration
+2. `GitHub Actions` voor CI
+3. `ESLint` voor codekwaliteit
+4. `Prometheus` voor metrics
+5. `Grafana` voor dashboards

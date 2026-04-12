@@ -3,9 +3,9 @@
 ## Overzicht
 
 Dit project gebruikt een microservices-architectuur.
-Niet alles loopt direct via een databasecall tussen services; een deel van de communicatie loopt via `RabbitMQ`.
+Requests lopen vooral via de `API Gateway`, terwijl events via `RabbitMQ` tussen services worden verspreid.
 
-## Hoofdonderdelen
+## Applicatielaag
 
 - `API Gateway`
 - `auth`
@@ -16,17 +16,28 @@ Niet alles loopt direct via een databasecall tussen services; een deel van de co
 - `clock`
 - `mail`
 
+## Ondersteunende laag
+
+- `MongoDB` voor opslag
+- `RabbitMQ` voor event-driven communicatie
+- `Docker` voor containerisatie
+- `Docker Swarm` voor orchestration
+- `Prometheus` voor metrics
+- `Grafana` voor dashboards
+- `GitHub Actions` voor CI
+
 ## Architectuur in woorden
 
-- De gebruiker praat vooral met de `API Gateway`
-- De gateway zet requests door naar achterliggende services
+- De gebruiker praat met de `API Gateway`
 - `auth` regelt registratie en login
-- `target` slaat targets op
-- `upload` slaat uploads op
-- `read` bevat een leesmodel voor targets
+- `target` en `upload` verwerken kernacties
+- `read` bouwt een leesmodel op vanuit events
 - `score` berekent scores op basis van target + upload
 - `clock` bewaakt deadlines
-- `mail` verstuurt automatisch registratiemails
+- `mail` verstuurt automatische berichten
+- `Prometheus` leest metrics uit
+- `Grafana` toont die metrics in dashboards
+- `GitHub Actions` controleert de code bij elke push of pull request
 
 ## Datastroom
 
@@ -55,39 +66,37 @@ flowchart LR
     Rabbit --> Read
     Rabbit --> Score[Score :3005]
     Rabbit --> Clock[Clock :3001]
+
+    Prometheus[Prometheus] --> Gateway
+    Prometheus --> Auth
+    Prometheus --> Target
+    Prometheus --> Upload
+    Prometheus --> Read
+    Prometheus --> Score
+    Prometheus --> Clock
+    Prometheus --> Mail
+    Grafana[Grafana] --> Prometheus
+    GHA[GitHub Actions] --> Repo[GitHub Repository]
 ```
 
-## Waarom dit interessant is voor DevOps
+## Waarom dit goed past bij DevOps
 
-Dit project past goed bij een DevOps-opdracht omdat je meerdere onderdelen tegelijk moet beheren:
+Dit project is sterk voor een DevOps-opdracht omdat je meerdere concerns tegelijk hebt:
 
-- meerdere services
-- meerdere poorten
-- messaging
-- databaseverbindingen
-- secrets via `.env`
-- monitoring/debugging over meerdere processen
+- meerdere services en poorten
+- database- en message-broker afhankelijkheden
+- secrets en configuratie per service
+- containerisatie en deploymentmogelijkheden
+- codekwaliteit via linting
+- monitoring en dashboards
+- CI via `GitHub Actions`
 
-## Pluspunten van deze opzet
+## Logische vervolgstappen
 
-- services zijn logisch gescheiden
-- event-driven onderdelen zijn aanwezig
-- gateway geeft een centraal binnenkomstpunt
-- het project laat goed zien hoe data tussen services beweegt
-
-## Nadelen of risico's
-
-- veel losse processen handmatig starten
-- afhankelijk van meerdere externe systemen
-- geen containerisatie aanwezig
-- geen CI/CD-configuratie aanwezig
-- logging en health checks zijn nog beperkt
-
-## Goede DevOps-vervolgstappen
-
-- `Dockerfile` per service
-- `docker-compose.yml` voor lokaal starten
-- health endpoints voor alle services
-- centrale logging
-- CI pipeline voor install, lint en rooktest
-- secrets beter beheren
+1. `Dockerfile` per service toevoegen
+2. `docker-compose.yml` maken voor lokaal gebruik
+3. stack geschikt maken voor `Docker Swarm`
+4. `ESLint` toevoegen aan elke Node-service
+5. metrics endpoints toevoegen voor `Prometheus`
+6. dashboards bouwen in `Grafana`
+7. `GitHub Actions` pipeline maken voor install, lint en rooktest

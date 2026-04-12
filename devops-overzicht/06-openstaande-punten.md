@@ -1,93 +1,69 @@
 # Openstaande Punten
 
-## Belangrijkste openstaande punten
+## Functionele aandachtspunten
 
-### 1. Score-berekening verder valideren
-Bij de nieuwe end-to-end test kwam een `null` score terug voor een mini-testafbeelding.
-
-Actie:
+### 1. Score-berekening valideren
 
 - testen met echte afbeeldingen
 - edge cases in scorelogica nalopen
 
 ### 2. `winner` route controleren
-De `winner` route gaf bij de nieuwe test een timeout.
-
-Actie:
 
 - logica van `getWinner` nalopen
-- controleren of Imagga-calls of loops te lang duren
+- controleren of externe calls of loops te lang duren
+
+## Configuratie en security
 
 ### 3. Hardcoded secrets verwijderen
-De Imagga-inlog staat nu in code.
 
-Actie:
-
-- naar `.env` verplaatsen
+- Imagga-inlog naar `.env` verplaatsen
 
 ### 4. RabbitMQ-configuratie gelijktrekken
-Sommige services gebruiken `RABBITMQ_URL`, andere hardcoded `amqp://localhost`.
 
-Actie:
-
-- overal dezelfde configaanpak gebruiken
+- overal `RABBITMQ_URL` gebruiken
 
 ### 5. Health checks toevoegen
-Niet elke service heeft een eenvoudige health endpoint.
 
-Actie:
+- per service een simpele `/health` route
 
-- bijvoorbeeld `/health` voor alle services toevoegen
+## DevOps-uitbreidingen
 
-### 6. Logging verbeteren
-Er is nu vooral console logging.
+### 6. `ESLint` toevoegen
 
-Actie:
+- basisconfig maken
+- lintscript toevoegen aan `package.json`
+- lint opnemen in CI
 
-- standaard logformat afspreken
-- errors per service duidelijker maken
+### 7. `GitHub Actions` toevoegen
 
-### 7. Containerisatie toevoegen
-Voor een DevOps-vak is containerisatie erg waardevol.
+- workflow voor `npm install`
+- lintstap
+- optioneel rooktest of buildstap
 
-Actie:
+### 8. `Docker` en `Docker Swarm` toevoegen
 
 - `Dockerfile` per service
-- `docker-compose.yml` voor het hele project
+- `docker-compose.yml` voor lokaal gebruik
+- swarm-geschikte stack-configuratie
 
-### 8. CI/CD toevoegen
-Er is nu nog geen pipeline.
+### 9. `Prometheus` en `Grafana` toevoegen
 
-Actie:
+- metrics endpoint of exporter per service
+- scrape-config voor `Prometheus`
+- dashboard voor uptime, requests en fouten
 
-- GitHub Actions of andere CI
-- automatische install
-- rooktest
-- eventueel lint/test stap
+## Bekende code-aandachtspunten
 
-### 9. Security verbeteren
-
-Actie:
-
-- secrets niet committen
-- `.gitignore` controleren
-- auth op alle gevoelige routes nalopen
-
-### 10. Bekende code-aandachtspunten
-
-Deze punten zijn handig om te controleren voordat je het project officieel inlevert:
-
-- `targetController.deleteTarget` gebruikt `targetService`, maar die staat niet zichtbaar ingeladen
+- `targetController.deleteTarget` gebruikt waarschijnlijk `targetService`, maar dat moet nog worden nagekeken
 - `upload` producer controleert op `this.upload` in plaats van `this.channel`
 - score-routes zijn niet overal afgeschermd
 
-## Prioriteiten voor school
-
-Als je beperkte tijd hebt, zou ik deze volgorde aanhouden:
+## Prioriteiten als je weinig tijd hebt
 
 1. documentatie op orde
-2. `.env` en setup op orde
-3. Docker Compose toevoegen
-4. health checks toevoegen
-5. score/winner bug onderzoeken
-6. CI pipeline toevoegen
+2. secrets en configuratie opschonen
+3. `ESLint` toevoegen
+4. `GitHub Actions` toevoegen
+5. `Docker Compose` of `Docker Swarm` opzetten
+6. monitoring met `Prometheus` en `Grafana`
+7. score- en winner-bugs verder onderzoeken

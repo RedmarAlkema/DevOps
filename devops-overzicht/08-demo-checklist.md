@@ -2,38 +2,40 @@
 
 ## Voor de demo
 
-- MongoDB draait
-- RabbitMQ draait
-- RabbitMQ Management UI opent
+- `MongoDB` draait
+- `RabbitMQ` draait
+- `RabbitMQ Management UI` opent
 - alle services zijn gestart
-- `nodemon` staat klaar als je tijdens de demo snel iets moet herstarten
 - `.env` bestanden staan goed
-- Postman collection of losse requests staan klaar
+- Postman requests staan klaar
+- `ESLint` draait zonder verrassingen
+- `GitHub Actions` laatste run is groen
+- `Prometheus` draait
+- `Grafana` dashboard opent
 
-## Tijdens de demo
+## Handige demo-volgorde
 
-### 1. Architectuur uitleggen
+### 1. Architectuur kort uitleggen
 
-Leg kort uit:
+Laat in een minuut zien:
 
 - gateway
 - microservices
 - MongoDB
 - RabbitMQ
-- automatische events
+- Docker of Docker Swarm
+- Prometheus en Grafana
 
-### 2. Infrastructurele onderdelen laten zien
+### 2. Infrastructuur laten zien
 
 Laat zien:
 
-- MongoDB draait
-- RabbitMQ draait
-- queues/exchanges bestaan
+- containers of services draaien
+- queues en exchanges bestaan
 - services luisteren op hun poorten
+- metrics worden verzameld
 
 ### 3. Functionele flow laten zien
-
-Laat deze stappen zien:
 
 1. user register
 2. user login
@@ -43,26 +45,16 @@ Laat deze stappen zien:
 6. upload posten
 7. score ophalen
 
-### 4. DevOps-verbeteringen uitleggen
+### 4. DevOps-verbeteringen laten zien
 
-Als je ze hebt toegevoegd:
+Laat kort zien:
 
-- Docker
-- Compose
-- health checks
-- CI
-- betere configuratie
+- `GitHub Actions` workflow
+- `ESLint` lintstap
+- `Docker Swarm` of `docker compose`
+- `Prometheus` targets
+- `Grafana` dashboard
 
-## Eerlijke eindboodschap
+## Sterke eindboodschap
 
-Een sterke afsluiting is:
-
-> De applicatie draait lokaal als microservices-omgeving met messaging en database-integratie. De hoofdflow werkt. Voor een productieklare DevOps-opzet zijn containerisatie, CI/CD, health checks en verdere hardening de logische vervolgstappen.
-
-## Handige bijlagen voor je inlevering
-
-- screenshots van services die draaien
-- screenshot van RabbitMQ Management
-- screenshot van MongoDB Compass
-- export van Postman requests
-- deze documentatiemap
+> De applicatie draait als microservices-omgeving met database, messaging en een werkende hoofdflow. De DevOps-uitbreidingen laten zien hoe kwaliteit, deployment en monitoring structureel verbeterd worden met ESLint, GitHub Actions, Docker Swarm, Prometheus en Grafana.

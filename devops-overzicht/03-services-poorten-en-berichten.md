@@ -4,22 +4,24 @@
 
 | Service | Poort | Functie |
 | --- | --- | --- |
-| API Gateway | `3000` | Centrale ingang voor requests naar microservices |
-| Auth | `5000` | Registratie en login |
-| Clock | `3001` | Bewaakt deadlines |
-| Upload | `3002` | Verwerkt uploads |
-| Target | `3003` | Verwerkt targets |
-| Read | `3004` | Leest targets op uit read-model |
-| Score | `3005` | Berekent scores |
-| Mail | `3006` | Verstuurt e-mails |
+| `API Gateway` | `3000` | Centrale ingang voor requests |
+| `auth` | `5000` | Registratie en login |
+| `clock` | `3001` | Bewaakt deadlines |
+| `upload` | `3002` | Verwerkt uploads |
+| `target` | `3003` | Verwerkt targets |
+| `read` | `3004` | Leest targets uit het read-model |
+| `score` | `3005` | Berekent scores |
+| `mail` | `3006` | Verstuurt e-mails |
 
-## Externe poorten
+## Externe onderdelen
 
 | Onderdeel | Poort | Opmerking |
 | --- | --- | --- |
-| MongoDB | `27017` | Database |
-| RabbitMQ | `5672` | Berichtenverkeer |
-| RabbitMQ Management | `15672` | Webinterface |
+| `MongoDB` | `27017` | Database |
+| `RabbitMQ` | `5672` | Broker voor berichten |
+| `RabbitMQ Management` | `15672` | Webinterface |
+| `Prometheus` | `9090` | Metrics verzamelen |
+| `Grafana` | `3007` of `3000` | Dashboarding, afhankelijk van configuratie |
 
 ## Belangrijke routes
 
@@ -42,17 +44,14 @@
 - `GET /score/scores/<targetId>`
 - `GET /score/winner/<targetId>`
 
-### Clock
+### Clock en Mail
 
 - `GET /clock`
-
-### Mail
-
 - `GET /`
 
 ## Exchanges en queues
 
-### RabbitMQ exchanges die ik in de code terugzie
+### Exchanges die in de code terugkomen
 
 - `Register_exchange`
 - `TargetExchange`
@@ -68,13 +67,12 @@
 - `score` consumeert deadline-events
 - `clock` consumeert target-events
 
-## Handige uitleg voor je opdracht
+## Handige DevOps-aanvulling
 
-Je kunt dit uitleggen als:
+Als je `Prometheus` en `Grafana` toevoegt, kun je per service zichtbaar maken:
 
-1. De gebruiker doet een request
-2. Een service slaat data op in MongoDB
-3. Daarna publiceert die service een event naar RabbitMQ
-4. Andere services reageren op dat event en bouwen hun eigen status op
-
-Dat is een goed voorbeeld van een event-driven microservices-architectuur.
+- uptime
+- foutmeldingen
+- request-aantallen
+- responstijden
+- queue-activiteit

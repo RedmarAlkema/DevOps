@@ -1,112 +1,87 @@
 # Volgorde Aanpak Checklist
 
-## Doel van deze checklist
+## Doel
 
-Deze checklist helpt je om dit project in een logische volgorde om te bouwen naar een nette DevOps-schoolopdracht.
-De focus ligt op overzicht, reproduceerbaarheid en een goede demo.
+Deze checklist helpt je om het project stap voor stap om te bouwen naar een nette DevOps-schoolopdracht.
 
-## Fase 1: Nieuwe basis klaarzetten
+## Fase 1: Basis klaarzetten
 
-- kies een nieuwe map voor de DevOps-versie van het project
-- kopieer de huidige code naar die nieuwe map
-- verwijder tijdelijke bestanden die niet mee hoeven
-- controleer dat `node_modules` nergens mee de nieuwe Git in gaan
+- kies een nieuwe map voor de DevOps-versie
+- kopieer de huidige code
+- verwijder tijdelijke bestanden
+- controleer dat `node_modules` niet mee de Git in gaan
 - controleer dat `.env` bestanden geen secrets lekken
-- voer `git init` uit in de nieuwe map
-- maak een eerste commit van de basisversie
+- voer `git init` uit
+- maak een eerste commit
 
 ## Fase 2: Documentatie op orde brengen
 
-- voeg deze map `devops-overzicht` toe aan de nieuwe repository
-- schrijf of verbeter een hoofd-`README.md`
-- beschrijf kort wat het project doet
-- beschrijf welke services er zijn
-- beschrijf welke externe systemen nodig zijn
-- beschrijf hoe je alles lokaal opstart
-- beschrijf wat al werkt en wat nog openstaat
+- voeg `devops-overzicht` toe aan de repository
+- verbeter de hoofd-`README.md`
+- beschrijf services, externe systemen en startvolgorde
+- leg uit welke DevOps-tools je gebruikt
 
 ## Fase 3: Lokale omgeving reproduceerbaar maken
 
-- controleer per service of `npm install` werkt
-- controleer of `nodemon` beschikbaar is via `npx nodemon --version`
-- controleer per service of de `.env` compleet is
-- maak een duidelijke lijst van alle omgevingsvariabelen
-- test of `MongoDB` draait
-- test of `RabbitMQ` draait
-- start alle services in aparte terminals met `node` of liever `nodemon`
-- controleer of alle poorten luisteren
+- controleer per service `npm install`
+- controleer `.env` per service
+- test `MongoDB`
+- test `RabbitMQ`
+- start alle services
+- controleer alle poorten
 
-## Fase 4: Functionele basis aantonen
+## Fase 4: Kwaliteit toevoegen
 
-- test `register`
-- test `login`
-- test een request via de gateway
+- voeg `ESLint` toe
+- maak een lintscript in `package.json`
+- los de belangrijkste lintproblemen op
+
+## Fase 5: CI toevoegen
+
+- maak een `GitHub Actions` workflow
+- laat CI draaien op push en pull request
+- voeg install- en lintstappen toe
+- voeg optioneel een rooktest toe
+
+## Fase 6: Containerisatie en orchestration
+
+- maak `Dockerfile`s per service
+- maak een `docker-compose.yml`
+- zet de stack om naar `Docker Swarm` waar relevant
+- test of services samen opstarten
+
+## Fase 7: Monitoring toevoegen
+
+- voeg metrics endpoints of exporters toe
+- maak een `Prometheus` configuratie
+- maak een `Grafana` dashboard
+- toon basisinformatie zoals uptime, requests en errors
+
+## Fase 8: Functionele basis opnieuw aantonen
+
+- test register
+- test login
 - test target aanmaken
 - test read ophalen
 - test upload posten
 - test score ophalen
-- noteer wat werkt
-- noteer eerlijk wat nog niet helemaal goed werkt
+- noteer wat werkt en wat nog openstaat
 
-## Fase 5: DevOps-verbeteringen toevoegen
+## Fase 9: Bewijs verzamelen
 
-- voeg een goede `.gitignore` toe
-- maak configuratie consistenter
-- haal hardcoded secrets uit de code
-- voeg health endpoints toe zoals `/health`
-- verbeter logging waar nodig
-- maak eventueel een `docker-compose.yml`
-- maak eventueel `Dockerfile`s per service
-
-## Fase 6: Bewijs verzamelen voor je opdracht
-
-- maak screenshots van draaiende services
-- maak een screenshot van RabbitMQ Management
-- maak een screenshot van MongoDB Compass
-- bewaar een paar succesvolle testrequests
-- maak eventueel een Postman collection
-- noteer welke poorten en services actief zijn
-- schrijf een korte samenvatting van je testresultaten
-
-## Fase 7: Presentatie of demo voorbereiden
-
-- zorg dat alle services vooraf getest zijn
-- zorg dat je `.env` goed staat
-- zorg dat MongoDB en RabbitMQ al draaien
-- zet je terminals overzichtelijk klaar
-- gebruik bij voorkeur `nodemon` tijdens het oefenen, zodat services automatisch herstarten
-- kies een korte demo-flow van maximaal een paar minuten
-- begin met architectuur
-- laat daarna de flow zien
-- sluit af met verbeterpunten en DevOps-lessen
+- screenshot van draaiende stack
+- screenshot van `GitHub Actions`
+- screenshot van RabbitMQ Management
+- screenshot van MongoDB Compass
+- screenshot van `Prometheus`
+- screenshot van `Grafana`
+- Postman requests of demo-stappen bewaren
 
 ## Aanbevolen volgorde als je weinig tijd hebt
 
-1. nieuwe repo opzetten
-2. documentatie toevoegen
-3. project lokaal stabiel laten draaien
-4. basisflow testen
-5. health checks toevoegen
-6. Docker Compose toevoegen
-7. laatste bugs noteren of fixen
-
-## Handige definitie van "klaar genoeg"
-
-Voor een schoolopdracht hoeft het niet perfect productie-klaar te zijn.
-Het is vaak al sterk genoeg als je kunt aantonen dat:
-
-- de architectuur duidelijk is
-- de setup reproduceerbaar is
-- de services samenwerken
-- je weet welke risico's en verbeterpunten er nog zijn
-
-## Afvinklijst voor vlak voor inleveren
-
-- nieuwe Git-repository staat klaar
-- documentatie is aanwezig
-- `.gitignore` klopt
-- secrets staan niet in commits
-- MongoDB en RabbitMQ zijn opgenomen in je uitleg
-- services zijn getest
-- demo-flow is geoefend
-- bekende bugs zijn eerlijk benoemd
+1. documentatie opschonen
+2. `ESLint` toevoegen
+3. `GitHub Actions` toevoegen
+4. `Docker Compose` of `Docker Swarm` toevoegen
+5. `Prometheus` en `Grafana` toevoegen
+6. laatste bugs noteren of fixen

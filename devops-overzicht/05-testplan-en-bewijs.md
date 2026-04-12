@@ -1,6 +1,6 @@
 # Testplan En Bewijs
 
-## Wat al getest is
+## Wat al functioneel getest is
 
 Lokaal is bevestigd dat:
 
@@ -27,9 +27,9 @@ Deze flow is getest:
 7. upload aangemaakt via gateway
 8. score opgehaald voor het nieuwe target
 
-## Resultaat van de end-to-end flow
+## Resultaat
 
-Technisch werkt de flow:
+Technisch werkt de keten:
 
 - registratie werkt
 - login werkt
@@ -40,30 +40,29 @@ Technisch werkt de flow:
 
 ## Bekende observatie
 
-Bij de test met een hele kleine kunstmatige testafbeelding kwam de score terug als `null`.
-Dat betekent waarschijnlijk niet dat de hele keten kapot is, maar dat:
+Bij een test met een kleine kunstmatige testafbeelding kwam de score terug als `null`.
+Dat wijst waarschijnlijk op een edge case in data of scorelogica, niet direct op een kapotte infrastructuur.
 
-- de gebruikte testafbeelding niet geschikt was voor de scorelogica
-- of de scorelogica een edge case heeft
+## Extra bewijs dat goed past bij DevOps
 
-Belangrijk:
+Naast functionele tests kun je dit als bewijs toevoegen:
 
-- op bestaande data gaf de score-service wel geldige scores terug
+- `ESLint` resultaat zonder fouten of met bekende waarschuwingen
+- `GitHub Actions` run die succesvol installeert en lint
+- `docker compose up` of `docker stack deploy` screenshot
+- `Prometheus` target-status
+- `Grafana` dashboard met service-metrics
+- RabbitMQ queues en exchanges in beeld
 
-## Hoe je dit in je opdracht kunt verwoorden
+## Demo-test voor de basis
 
-Een eerlijke formulering is:
-
-> De infrastructuur en servicecommunicatie werken. De hoofdflow is end-to-end getest. Er is nog een functioneel aandachtspunt in de scoreberekening voor bepaalde testafbeeldingen.
-
-## Demo-test die je kunt uitvoeren
-
-### Basiscontrole
+### Infrastructuurcontrole
 
 1. Start `MongoDB`
 2. Start `RabbitMQ`
 3. Start alle services
 4. Controleer de poorten
+5. Controleer optioneel `Prometheus` en `Grafana`
 
 ### Functionele controle
 
@@ -74,10 +73,12 @@ Een eerlijke formulering is:
 5. `POST /upload/upload/`
 6. `GET /score/scores/<targetId>`
 
-## Wat nog mooier zou zijn als bewijs
+### Kwaliteitscontrole
 
-- Postman collection export
-- screenshots van RabbitMQ queues
-- screenshot van MongoDB data
-- terminal-output van opstartende services
-- een korte screenrecording van de flow
+1. voer `npx eslint .` uit
+2. controleer of `GitHub Actions` groen is
+3. controleer of metrics zichtbaar zijn
+
+## Eerlijke formulering voor je verslag
+
+> De microservices, databaseverbindingen en messaging werken end-to-end. De hoofdflow is getest. Er is nog een functioneel aandachtspunt in de scoreberekening voor bepaalde testafbeeldingen. De DevOps-uitbreidingen richten zich op containerisatie, CI, linting en monitoring.

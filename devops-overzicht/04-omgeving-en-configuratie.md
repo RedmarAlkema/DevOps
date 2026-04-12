@@ -1,59 +1,46 @@
 # Omgeving En Configuratie
 
-## Omgevingsvariabelen die in de code voorkomen
+## Belangrijkste omgevingsvariabelen
 
-- `MONGO_URI`
-- `RABBITMQ_URL`
-- `JWT_SECRET`
-- `GATEWAY_KEY`
-- `EMAIL_USER`
-- `EMAIL_PASS`
-- `PORT`
+| Variabele | Doel |
+| --- | --- |
+| `MONGO_URI` | Verbinding met MongoDB |
+| `RABBITMQ_URL` | Verbinding met RabbitMQ |
+| `JWT_SECRET` | Tokens ondertekenen en controleren |
+| `GATEWAY_KEY` | Interne gateway-beveiliging |
+| `EMAIL_USER` | SMTP-gebruiker |
+| `EMAIL_PASS` | SMTP-wachtwoord |
+| `PORT` | Poort van de service |
+| `IMAGGA_API_KEY` | API-key voor score-service |
+| `IMAGGA_API_SECRET` | API-secret voor score-service |
 
-## Wat deze variabelen doen
+## Aanvullende variabelen voor DevOps-tools
 
-### `MONGO_URI`
-Verbinding met MongoDB.
-
-### `RABBITMQ_URL`
-Verbinding met RabbitMQ.
-
-Let op:
-
-- een deel van de code gebruikt deze variabele
-- een deel van de code gebruikt nog hardcoded `amqp://localhost`
-
-### `JWT_SECRET`
-Wordt gebruikt voor het ondertekenen en controleren van tokens.
-
-### `GATEWAY_KEY`
-Interne beveiliging zodat sommige services alleen via de gateway bereikbaar horen te zijn.
-
-### `EMAIL_USER` en `EMAIL_PASS`
-Worden gebruikt door de mailservice.
+| Variabele | Doel |
+| --- | --- |
+| `NODE_ENV` | Omgeving zoals `development` of `production` |
+| `PROMETHEUS_PORT` | Poort voor metrics of exporter |
+| `GRAFANA_ADMIN_USER` | Login voor Grafana |
+| `GRAFANA_ADMIN_PASSWORD` | Wachtwoord voor Grafana |
 
 ## Huidige situatie
 
-Er staan `.env` bestanden in de service-mappen.
-Dat werkt lokaal, maar voor een DevOps-opzet is het mooier om configuratie consistenter te maken.
+- er staan `.env` bestanden in service-mappen
+- configuratie is nog niet overal gelijk opgezet
+- een deel van de RabbitMQ-configuratie is nog hardcoded
+- Imagga-credentials horen nog uit de code gehaald te worden
 
-## Verbeterpunten
+## Aanbevolen structuur
 
-### 1. Consistente `.env` structuur
-Nu laden niet alle services configuratie op exact dezelfde manier.
+Gebruik per service een duidelijke `.env` of `.env.example` met dezelfde opbouw:
 
-### 2. Geen secrets in broncode
-De Imagga-credentials staan nu hardcoded in de score-service.
-Voor een DevOps-opdracht is het beter om die ook naar environment variables te verplaatsen.
+1. basisconfig zoals `PORT`
+2. infrastructuur zoals `MONGO_URI` en `RABBITMQ_URL`
+3. security zoals `JWT_SECRET` en `GATEWAY_KEY`
+4. externe integraties zoals SMTP en Imagga
+5. monitoring-instellingen voor `Prometheus` of exporters
 
-### 3. Centrale configuratiestrategie
-Bijvoorbeeld:
-
-- per service een eigen `.env`
-- of een root `.env` met duidelijke documentatie
-- of later secrets via Docker/Kubernetes/Vercel/GitHub Actions
-
-## Voorbeeld van logische variabelen per service
+## Voorbeeld per service
 
 ### Auth
 
@@ -83,7 +70,16 @@ Bijvoorbeeld:
 - `EMAIL_USER=...`
 - `EMAIL_PASS=...`
 
-## DevOps-les hieruit
+## CI en deployment
 
-Configuratie hoort niet hardcoded in code te staan.
-Een belangrijk deel van DevOps is juist dat je omgevingen netjes, veilig en herhaalbaar kunt opzetten.
+Voor `GitHub Actions` en later `Docker Swarm` is het handig om dit aan te houden:
+
+- secrets niet committen
+- `.env.example` wel committen
+- GitHub repository secrets gebruiken voor CI
+- productie-instellingen apart houden van lokale instellingen
+
+## DevOps-les
+
+Configuratie hoort voorspelbaar, veilig en herhaalbaar te zijn.
+Juist daar helpen `GitHub Actions`, `Docker`, `Prometheus` en `Grafana` later ook bij.

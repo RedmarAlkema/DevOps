@@ -2,18 +2,17 @@
 
 ## Doel
 
-Je wilt deze codebasis gebruiken voor een ander vak en daar een nieuwe repository van maken, met een net verhaal eromheen.
+Je wilt van deze codebasis een nette DevOps-repository maken met documentatie, CI, containerisatie en monitoring.
 
 ## Praktische aanpak
 
-### Optie A: nieuwe map kopieren en daar opnieuw starten
-Dit is meestal het veiligst voor een schoolopdracht.
+### Optie A: nieuwe map kopieren en opnieuw starten
 
-Voorbeeld:
+Dit is meestal het veiligst voor een schoolproject.
 
 ```powershell
-Copy-Item C:\CloudServices C:\CloudServices-DevOps -Recurse
-cd C:\CloudServices-DevOps
+Copy-Item C:\DevOps C:\DevOps-DevOpsVersie -Recurse
+cd C:\DevOps-DevOpsVersie
 git init
 git branch -M main
 git add .
@@ -21,56 +20,52 @@ git commit -m "Initial import of microservices project for DevOps assignment"
 ```
 
 ### Optie B: huidige map opschonen en nieuwe remote koppelen
+
 Alleen doen als je zeker weet dat je de bestaande Git-historie niet meer nodig hebt.
 
-## Wat je eerst moet opschonen
-
-Voordat je opnieuw commit:
-
-- `node_modules` niet meenemen
-- tijdelijke testbestanden niet meenemen
-- `.env` bestanden niet committen als daar secrets in staan
-- grote of onnodige bestanden verwijderen
-
-## Wat er idealiter in de nieuwe repository staat
+## Wat er in de nieuwe repository moet staan
 
 - broncode van alle services
-- documentatie
-- een goede `README`
+- documentatie in `devops-overzicht`
+- goede `README.md`
 - `.gitignore`
-- eventueel `docker-compose.yml`
-- eventueel CI-configuratie
+- `.env.example`
+- `Dockerfile`s en `docker-compose.yml`
+- `GitHub Actions` workflow
+- `ESLint` configuratie
+- monitoring-config voor `Prometheus` en `Grafana`
 
 ## Handige commitvolgorde
 
 1. `Initial import of existing microservices project`
 2. `Add DevOps documentation`
-3. `Add environment setup instructions`
-4. `Add Docker Compose for local development`
-5. `Add health checks and smoke test documentation`
-6. `Fix score and winner edge cases`
+3. `Add environment examples and gitignore`
+4. `Add ESLint configuration`
+5. `Add GitHub Actions CI workflow`
+6. `Add Docker and Docker Swarm setup`
+7. `Add Prometheus and Grafana monitoring`
+8. `Fix score and winner edge cases`
 
 ## Wat docenten vaak waarderen
 
 - duidelijke commit messages
-- logische projectstructuur
+- kleine, logische stappen
 - reproduceerbare setup
-- transparantie over wat werkt en wat nog openstaat
+- eerlijke uitleg over risico's en openstaande punten
+- zichtbaar gebruik van CI en monitoring
 
 ## Goede DevOps-insteek voor jouw verslag
 
 Je kunt dit project positioneren als:
 
 - een bestaande applicatie die je DevOps-ready maakt
-- een project waar je deployment, configuratie en monitoring op verbetert
-- een project waarin je handmatig starten omzet naar reproduceerbare infrastructuur
+- een project waarin je handmatig starten omzet naar containers en orchestration
+- een project waarin je kwaliteit toevoegt met `ESLint` en `GitHub Actions`
+- een project waarin je observeerbaarheid toevoegt met `Prometheus` en `Grafana`
 
-## Aanbevolen volgende stap
+## Aanbevolen branch- en CI-aanpak
 
-De sterkste verbetering voor jouw vak zou waarschijnlijk zijn:
-
-1. nieuwe repository opzetten
-2. documentatie meenemen
-3. `docker-compose.yml` toevoegen
-4. rooktest/demostappen beschrijven
-5. eventueel CI toevoegen
+- werk met een `main` branch en feature branches
+- open wijzigingen via pull requests
+- laat `GitHub Actions` draaien op push en pull request
+- laat lint en basischecks verplicht meewegen
