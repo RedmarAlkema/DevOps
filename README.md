@@ -48,6 +48,3 @@ Meest logische publieke endpoints in Bunnyshell:
 - `Prometheus`: `http://localhost:9090`
 - `Grafana`: `http://localhost:3100`
 - standaarddashboard: `DevOps Monitoring Overview`
-
-Zie [devops-overzicht/README.md](devops-overzicht/README.md) voor het complete overzicht van de documentatie.
-Zie ook [devops-overzicht/11-bunnyshell-deploy.md](devops-overzicht/11-bunnyshell-deploy.md) voor de concrete deploystappen.

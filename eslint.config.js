@@ -2,7 +2,6 @@ module.exports = [
   {
     ignores: [
       '**/node_modules/**',
-      'devops-overzicht/**',
     ],
   },
   {
