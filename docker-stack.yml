@@ -17,6 +17,9 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-devops}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-devops}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
@@ -85,7 +88,7 @@ services:
     environment:
       PORT: 5000
       MONGO_URI: mongodb://mongo:27017/AuthDB
-      RABBITMQ_URL: amqp://rabbitmq:5672
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-devops}:${RABBITMQ_DEFAULT_PASS:-devops}@rabbitmq:5672
       JWT_SECRET: ${JWT_SECRET:-password}
       GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
     volumes:
@@ -104,7 +107,7 @@ services:
     environment:
       PORT: 3003
       MONGO_URI: mongodb://mongo:27017/targetservice
-      RABBITMQ_URL: amqp://rabbitmq:5672
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-devops}:${RABBITMQ_DEFAULT_PASS:-devops}@rabbitmq:5672
       JWT_SECRET: ${JWT_SECRET:-password}
       GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
     volumes:
@@ -123,7 +126,7 @@ services:
     environment:
       PORT: 3002
       MONGO_URI: mongodb://mongo:27017/UploadDB
-      RABBITMQ_URL: amqp://rabbitmq:5672
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-devops}:${RABBITMQ_DEFAULT_PASS:-devops}@rabbitmq:5672
       JWT_SECRET: ${JWT_SECRET:-password}
       GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
     volumes:
@@ -142,7 +145,7 @@ services:
     environment:
       PORT: 3004
       MONGO_URI: mongodb://mongo:27017/readService
-      RABBITMQ_URL: amqp://rabbitmq:5672
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-devops}:${RABBITMQ_DEFAULT_PASS:-devops}@rabbitmq:5672
       JWT_SECRET: ${JWT_SECRET:-password}
       GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
     volumes:
@@ -161,7 +164,7 @@ services:
     environment:
       PORT: 3005
       MONGO_URI: mongodb://mongo:27017/ScoreDB
-      RABBITMQ_URL: amqp://rabbitmq:5672
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-devops}:${RABBITMQ_DEFAULT_PASS:-devops}@rabbitmq:5672
       JWT_SECRET: ${JWT_SECRET:-password}
       GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
       IMAGGA_API_KEY: ${IMAGGA_API_KEY:-}
@@ -182,7 +185,7 @@ services:
     environment:
       PORT: 3001
       MONGO_URI: mongodb://mongo:27017/ClockDB
-      RABBITMQ_URL: amqp://rabbitmq:5672
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-devops}:${RABBITMQ_DEFAULT_PASS:-devops}@rabbitmq:5672
       JWT_SECRET: ${JWT_SECRET:-password}
       GATEWAY_KEY: ${GATEWAY_KEY:-supersecretkey123}
     volumes:
@@ -200,7 +203,7 @@ services:
       - "3006:3006"
     environment:
       PORT: 3006
-      RABBITMQ_URL: amqp://rabbitmq:5672
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-devops}:${RABBITMQ_DEFAULT_PASS:-devops}@rabbitmq:5672
       EMAIL_USER: ${EMAIL_USER:-change-me@example.com}
       EMAIL_PASS: ${EMAIL_PASS:-change-me}
     volumes:

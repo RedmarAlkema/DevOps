@@ -1,9 +1,7 @@
 const Upload = require("../models/Upload");
 const Target = require("../models/Target");
 const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
-const FormData = require('form-data');
+const FormData = require("form-data");
 
 const IMAGGA_ENDPOINT = "https://api.imagga.com/v2/tags";
 const AUTH_HEADER = {
@@ -14,11 +12,11 @@ const AUTH_HEADER = {
 };
 
 async function analyzeImageBuffer(buffer) {
-  const filePath = path.join(__dirname, "temp.jpg");
-  fs.writeFileSync(filePath, buffer);
-
   const formData = new FormData();
-  formData.append("image", fs.createReadStream(filePath));
+  formData.append("image", buffer, {
+    filename: "image.png",
+    contentType: "image/png"
+  });
 
   try {
     const response = await axios.post(IMAGGA_ENDPOINT, formData, {
@@ -26,16 +24,23 @@ async function analyzeImageBuffer(buffer) {
       headers: formData.getHeaders()
     });
 
-    fs.unlinkSync(filePath);
-
-    return response.data.result.tags.map(tag => tag.tag.en);
+    const tags = response?.data?.result?.tags || [];
+    return tags.map(tag => tag.tag.en).filter(Boolean);
   } catch (err) {
-    console.error("❌ Imagga API fout:", err.message);
+    console.error("Imagga API fout:", err.message);
     return [];
   }
 }
 
 function calculateSimilarity(tagsA, tagsB) {
+  if (!Array.isArray(tagsA) || !Array.isArray(tagsB)) {
+    return 0;
+  }
+
+  if (tagsA.length === 0 || tagsB.length === 0) {
+    return 0;
+  }
+
   const common = tagsA.filter(tag => tagsB.includes(tag));
   const percent = (common.length / Math.max(tagsA.length, tagsB.length)) * 100;
   return Math.round(percent);
@@ -81,7 +86,7 @@ exports.getScoreId = async (temp) => {
 
     const score = calculateSimilarity(tagsUpload, tagsTarget);
 
-    return ({ score });
+    return { score };
   } catch (err) {
     console.error("Fout bij score berekening:", err);
     return { msg: "Interne serverfout" };

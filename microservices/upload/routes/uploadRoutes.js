@@ -10,8 +10,23 @@ router.post("/", auth, upload.any(), async (req, res) => {
     try {
         const upload = await getUploadFromRequest(req);
         await upload.save();
-        await Producer.publishMessage(upload);
-        res.status(201).json({ message: "Upload opgeslagen en bericht verzonden" });
+
+        try {
+            await Producer.publishMessage(upload);
+        } catch (err) {
+            console.error("Upload-event kon niet worden verzonden:", err.message);
+            return res.status(201).json({
+                message: "Upload opgeslagen, maar bericht niet verzonden",
+                uploadId: upload.uploadId,
+                eventPublished: false
+            });
+        }
+
+        res.status(201).json({
+            message: "Upload opgeslagen en bericht verzonden",
+            uploadId: upload.uploadId,
+            eventPublished: true
+        });
     } catch (err) {
         console.error("Fout bij / route:", err.message);
         res.status(500).json({ message: "Er is iets fout gegaan" });
